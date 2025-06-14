@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://bws76f5da38pi"]
+
+[ext_resource type="Script" uid="uid://dks6moe68tph4" path="res://Scripts/Player.gd" id="1_cvnsp"]
+[ext_resource type="Texture2D" uid="uid://cr2xqn5wsgvhp" path="res://Assets/Thought.png" id="1_v0iea"]
+[ext_resource type="Script" uid="uid://cwwy53iimi6tq" path="res://Scripts/thought.gd" id="3_gntrk"]
+
+[node name="Player" type="Node2D"]
+script = ExtResource("1_cvnsp")
+
+[node name="Thought" type="Button" parent="."]
+offset_left = 130.0
+offset_top = -251.0
+offset_right = 630.0
+offset_bottom = 253.0
+scale = Vector2(0.5, 0.5)
+icon = ExtResource("1_v0iea")
+flat = true
+script = ExtResource("3_gntrk")
+
+[node name="Timer" type="Timer" parent="Thought"]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="pressed" from="Thought" to="." method="_on_thought_pressed"]
+[connection signal="timeout" from="Thought/Timer" to="Thought" method="_on_timer_timeout"]

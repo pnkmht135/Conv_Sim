@@ -1,0 +1,151 @@
+[gd_scene load_steps=13 format=3 uid="uid://6ogt8nlhhto5"]
+
+[ext_resource type="Texture2D" uid="uid://b3nb5n1b7cuxg" path="res://Assets/ConvoView.png" id="1_ebmjs"]
+[ext_resource type="Texture2D" uid="uid://dtfebhtaw001o" path="res://Assets/ChoiceView.png" id="1_wowpa"]
+[ext_resource type="PackedScene" uid="uid://y4wefkwptyni" path="res://Scenes/Person.tscn" id="2_qxrlw"]
+[ext_resource type="PackedScene" uid="uid://bws76f5da38pi" path="res://Scenes/Player.tscn" id="3_3dryh"]
+[ext_resource type="Script" uid="uid://y8iv2y6ltvde" path="res://Scripts/conv_handler.gd" id="3_wrm1d"]
+[ext_resource type="Script" uid="uid://dqri2kh50k8nc" path="res://Scripts/state_machine_class.gd" id="5_i6g32"]
+[ext_resource type="Script" uid="uid://c038n5gw76sk1" path="res://Scripts/choice_state.gd" id="7_1l0tm"]
+[ext_resource type="Texture2D" uid="uid://3s8rl8g2w84" path="res://Assets/progress_over.png" id="9_ldgsr"]
+
+[sub_resource type="Animation" id="Animation_i6g32"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(-1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_wowpa"]
+resource_name = "to_choice"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.2, 0.233333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(100, 1), Vector2(1142, 1), Vector2(1242, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1l0tm"]
+resource_name = "to_convo"
+length = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0333333, 0.2, 0.233333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(1242, 1), Vector2(1142, 1), Vector2(100, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1l0tm"]
+_data = {
+&"RESET": SubResource("Animation_i6g32"),
+&"to_choice": SubResource("Animation_wowpa"),
+&"to_convo": SubResource("Animation_1l0tm")
+}
+
+[node name="Level" type="Node2D"]
+
+[node name="Choice_view" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(1234.5, 4.49999)
+scale = Vector2(0.942963, 0.915677)
+texture = ExtResource("1_wowpa")
+
+[node name="Convo_view" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-1, 0)
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("1_ebmjs")
+
+[node name="Person1" parent="Convo_view" instance=ExtResource("2_qxrlw")]
+position = Vector2(-410, -166.667)
+
+[node name="Person2" parent="Convo_view" instance=ExtResource("2_qxrlw")]
+position = Vector2(-107.778, -180)
+
+[node name="Person3" parent="Convo_view" instance=ExtResource("2_qxrlw")]
+position = Vector2(425.556, -91.1111)
+scale = Vector2(-1, 1)
+
+[node name="Player" parent="Convo_view" instance=ExtResource("3_3dryh")]
+position = Vector2(-106.667, 357.778)
+scale = Vector2(1.11111, 1.11111)
+
+[node name="State_Machine" type="Node" parent="." node_paths=PackedStringArray("starting_state", "parent", "animations")]
+script = ExtResource("5_i6g32")
+starting_state = NodePath("Convo_state")
+parent = NodePath("..")
+animations = NodePath("../Camera2D/CameraAnimation")
+
+[node name="Convo_state" type="Node" parent="State_Machine" node_paths=PackedStringArray("Debuger", "Choice_State", "People", "Player", "State_machine")]
+script = ExtResource("3_wrm1d")
+Debuger = NodePath("../../Camera2D/Convo_debug")
+Choice_State = NodePath("../Choice_state")
+People = [NodePath("../../Convo_view/Person1"), NodePath("../../Convo_view/Person2"), NodePath("../../Convo_view/Person3")]
+Player = NodePath("../../Convo_view/Player")
+SB_Dur = 1.0
+SB_Gap = 1.0
+participate_Gap = 5.0
+Dur_delta = 0.5
+Gap_delta = 0.5
+Part_delta = 2.0
+Vibe_delta = 0.5
+animation_enter = "to_convo"
+State_machine = NodePath("..")
+
+[node name="Choice_state" type="Node" parent="State_Machine" node_paths=PackedStringArray("conv_state", "time_bar", "State_machine")]
+script = ExtResource("7_1l0tm")
+conv_state = NodePath("../Convo_state")
+Time_lim = 3.0
+time_bar = NodePath("../../Camera2D/TextureProgressBar")
+animation_enter = "to_choice"
+State_machine = NodePath("..")
+metadata/_custom_type_script = "uid://bhus84tgfm4dx"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-1, 1)
+scale = Vector2(0.999999, 0.999999)
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Camera2D"]
+visible = false
+offset_left = -533.001
+offset_top = 284.0
+offset_right = 540.999
+offset_bottom = 314.0
+rounded = true
+texture_under = ExtResource("9_ldgsr")
+texture_progress = ExtResource("9_ldgsr")
+tint_under = Color(0, 0, 0, 1)
+
+[node name="Convo_debug" type="Label" parent="Camera2D"]
+offset_left = -551.001
+offset_top = -304.0
+offset_right = -432.001
+offset_bottom = -241.0
+
+[node name="CameraAnimation" type="AnimationPlayer" parent="Camera2D"]
+unique_name_in_owner = true
+libraries = {
+&"": SubResource("AnimationLibrary_1l0tm")
+}

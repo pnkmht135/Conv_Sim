@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://6ogt8nlhhto5"]
+
+[ext_resource type="Texture2D" uid="uid://b3nb5n1b7cuxg" path="res://Assets/ConvoView.png" id="1_ebmjs"]
+[ext_resource type="PackedScene" uid="uid://y4wefkwptyni" path="res://Scenes/Person.tscn" id="2_qxrlw"]
+[ext_resource type="PackedScene" uid="uid://bws76f5da38pi" path="res://Scenes/Player.tscn" id="3_3dryh"]
+[ext_resource type="Script" uid="uid://y8iv2y6ltvde" path="res://Scripts/conv_handler.gd" id="3_wrm1d"]
+
+[node name="Level" type="Node2D"]
+
+[node name="Convo_view" type="Sprite2D" parent="."]
+position = Vector2(-1, 0)
+scale = Vector2(0.9, 0.9)
+texture = ExtResource("1_ebmjs")
+
+[node name="Camera2D" type="Camera2D" parent="Convo_view"]
+scale = Vector2(1.11111, 1.11111)
+
+[node name="Person1" parent="Convo_view" instance=ExtResource("2_qxrlw")]
+position = Vector2(-410, -166.667)
+
+[node name="Person2" parent="Convo_view" instance=ExtResource("2_qxrlw")]
+position = Vector2(-107.778, -180)
+
+[node name="Person3" parent="Convo_view" instance=ExtResource("2_qxrlw")]
+position = Vector2(425.556, -91.1111)
+scale = Vector2(-1, 1)
+
+[node name="Player" parent="Convo_view" instance=ExtResource("3_3dryh")]
+position = Vector2(-106.667, 357.778)
+scale = Vector2(1.11111, 1.11111)
+
+[node name="State_Machine" type="Node" parent="."]
+
+[node name="Convo_state" type="Node" parent="State_Machine" node_paths=PackedStringArray("Debuger", "Player")]
+script = ExtResource("3_wrm1d")
+Debuger = NodePath("Convo_debug")
+Player = NodePath("../../Convo_view/Player")
+SB_Dur = 1.0
+SB_Gap = 1.0
+participate_Gap = 5.0
+Dur_delta = 0.5
+Gap_delta = 0.5
+Part_delta = 2.0
+Vibe_delta = 0.5
+
+[node name="Convo_debug" type="Label" parent="State_Machine/Convo_state"]
+offset_left = -560.0
+offset_top = -309.0
+offset_right = -441.0
+offset_bottom = -246.0
