@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://4k2jameh1sb4"]
+
+[ext_resource type="Script" uid="uid://dbg8n5rsla8eq" path="res://Scripts/choice_bub.gd" id="1_2mo68"]
+[ext_resource type="Texture2D" uid="uid://dm1ra1a2fsigp" path="res://Assets/SpeachBub.png" id="1_rskal"]
+[ext_resource type="Texture2D" uid="uid://dbg8qc1qhwbk7" path="res://Assets/Talk.png" id="3_2mo68"]
+
+[node name="Choice" type="Node2D"]
+script = ExtResource("1_2mo68")
+
+[node name="SB" type="Sprite2D" parent="."]
+position = Vector2(76, -109)
+scale = Vector2(0.579148, 0.56383)
+texture = ExtResource("1_rskal")
+
+[node name="Button" type="Button" parent="."]
+offset_left = -83.0
+offset_top = -190.0
+offset_right = 164.0
+offset_bottom = -37.0
+flat = true
+
+[node name="Speach" type="Sprite2D" parent="."]
+modulate = Color(0, 0, 0, 1)
+position = Vector2(80, -130)
+scale = Vector2(0.369763, 0.381915)
+texture = ExtResource("3_2mo68")
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]

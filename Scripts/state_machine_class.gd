@@ -5,6 +5,7 @@ extends Node
 @export var parent: Node2D
 @export var animations: AnimationPlayer
 var current_state: State
+var current_colour: Color
 
 func _ready() -> void:
 #func init(parent: Node2D, 

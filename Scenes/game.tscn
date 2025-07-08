@@ -1,7 +1,8 @@
-[gd_scene load_steps=13 format=3 uid="uid://6ogt8nlhhto5"]
+[gd_scene load_steps=14 format=3 uid="uid://6ogt8nlhhto5"]
 
 [ext_resource type="Texture2D" uid="uid://b3nb5n1b7cuxg" path="res://Assets/ConvoView.png" id="1_ebmjs"]
 [ext_resource type="Texture2D" uid="uid://dtfebhtaw001o" path="res://Assets/ChoiceView.png" id="1_wowpa"]
+[ext_resource type="PackedScene" uid="uid://4k2jameh1sb4" path="res://Scenes/Choice_bub.tscn" id="2_h4fw4"]
 [ext_resource type="PackedScene" uid="uid://y4wefkwptyni" path="res://Scenes/Person.tscn" id="2_qxrlw"]
 [ext_resource type="PackedScene" uid="uid://bws76f5da38pi" path="res://Scenes/Player.tscn" id="3_3dryh"]
 [ext_resource type="Script" uid="uid://y8iv2y6ltvde" path="res://Scripts/conv_handler.gd" id="3_wrm1d"]
@@ -65,11 +66,45 @@ _data = {
 
 [node name="Level" type="Node2D"]
 
+[node name="Camera2D" type="Camera2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(-1, 1)
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="Camera2D"]
+visible = false
+offset_left = -533.001
+offset_top = 284.0
+offset_right = 540.999
+offset_bottom = 314.0
+rounded = true
+texture_under = ExtResource("9_ldgsr")
+texture_progress = ExtResource("9_ldgsr")
+tint_under = Color(0, 0, 0, 1)
+
+[node name="Convo_debug" type="Label" parent="Camera2D"]
+offset_left = -551.001
+offset_top = -304.0
+offset_right = -432.001
+offset_bottom = -241.0
+
+[node name="CameraAnimation" type="AnimationPlayer" parent="Camera2D"]
+unique_name_in_owner = true
+libraries = {
+&"": SubResource("AnimationLibrary_1l0tm")
+}
+
 [node name="Choice_view" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(1234.5, 4.49999)
+position = Vector2(1219, 7)
 scale = Vector2(0.942963, 0.915677)
 texture = ExtResource("1_wowpa")
+
+[node name="Choice" parent="Choice_view" instance=ExtResource("2_h4fw4")]
+position = Vector2(-394.501, -62.249)
+
+[node name="Choice2" parent="Choice_view" instance=ExtResource("2_h4fw4")]
+position = Vector2(382.836, -74.262)
+scale = Vector2(-1, 1)
 
 [node name="Convo_view" type="Sprite2D" parent="."]
 unique_name_in_owner = true
@@ -105,7 +140,6 @@ People = [NodePath("../../Convo_view/Person1"), NodePath("../../Convo_view/Perso
 Player = NodePath("../../Convo_view/Player")
 SB_Dur = 1.0
 SB_Gap = 1.0
-participate_Gap = 5.0
 Dur_delta = 0.5
 Gap_delta = 0.5
 Part_delta = 2.0
@@ -113,39 +147,15 @@ Vibe_delta = 0.5
 animation_enter = "to_convo"
 State_machine = NodePath("..")
 
-[node name="Choice_state" type="Node" parent="State_Machine" node_paths=PackedStringArray("conv_state", "time_bar", "State_machine")]
+[node name="Choice_state" type="Node" parent="State_Machine" node_paths=PackedStringArray("conv_state", "time_bar", "choices", "State_machine")]
 script = ExtResource("7_1l0tm")
 conv_state = NodePath("../Convo_state")
-Time_lim = 3.0
+Time_lim = 2.0
 time_bar = NodePath("../../Camera2D/TextureProgressBar")
+choice_delta = 0.5
+choices = [NodePath("../../Choice_view/Choice"), NodePath("../../Choice_view/Choice2")]
 animation_enter = "to_choice"
 State_machine = NodePath("..")
 metadata/_custom_type_script = "uid://bhus84tgfm4dx"
 
-[node name="Camera2D" type="Camera2D" parent="."]
-unique_name_in_owner = true
-position = Vector2(-1, 1)
-scale = Vector2(0.999999, 0.999999)
-
-[node name="TextureProgressBar" type="TextureProgressBar" parent="Camera2D"]
-visible = false
-offset_left = -533.001
-offset_top = 284.0
-offset_right = 540.999
-offset_bottom = 314.0
-rounded = true
-texture_under = ExtResource("9_ldgsr")
-texture_progress = ExtResource("9_ldgsr")
-tint_under = Color(0, 0, 0, 1)
-
-[node name="Convo_debug" type="Label" parent="Camera2D"]
-offset_left = -551.001
-offset_top = -304.0
-offset_right = -432.001
-offset_bottom = -241.0
-
-[node name="CameraAnimation" type="AnimationPlayer" parent="Camera2D"]
-unique_name_in_owner = true
-libraries = {
-&"": SubResource("AnimationLibrary_1l0tm")
-}
+[editable path="Convo_view/Person1"]

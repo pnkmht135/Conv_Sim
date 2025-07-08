@@ -14,3 +14,7 @@ config/name="Conversation_Simulator"
 run/main_scene="uid://6ogt8nlhhto5"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/resizable=false

@@ -47,18 +47,17 @@ func thought_pressed()->void:
 		await get_tree().create_timer(0.5).timeout
 		Player.modulate=Color.WHITE
 		return
-	print("EPIC!")
+	#print("EPIC!")
 	#camera_animation.play("to_choice")
 	Player.thought.disabled=true
 	Player.thought.hide()
 	State_machine.change_state(Choice_State)
 	
-
 func _generate_random_rgb_color() -> Color:
 	return Color(
-		randf(), # RED
-		randf(), # GREEN
-		randf(), # BLUE
+		randf_range(0.2,0.8), # RED
+		randf_range(0.2,0.8), # GREEN
+		randf_range(0.2,0.8), # BLUE
 	)
 
 func set_SB_timings()->void:
@@ -71,11 +70,12 @@ func colour_drift()->void:
 	if !Current_Colour:
 		pass
 	var drift = Color(
-		randf_range(-Vibe_delta,Vibe_delta),
-		randf_range(-Vibe_delta,Vibe_delta),
-		randf_range(-Vibe_delta,Vibe_delta)
+		clamp(Current_Colour[0]+randf_range(-Vibe_delta,Vibe_delta),0.2,0.8),
+		clamp(Current_Colour[1]+randf_range(-Vibe_delta,Vibe_delta),0.2,0.8),
+		clamp(Current_Colour[2]+randf_range(-Vibe_delta,Vibe_delta),0.2,0.8),
 	)
-	Current_Colour+=drift
+	Current_Colour=drift
+	
 
 func get_person()->Person:
 	var person=People[randi_range(0,Num_People-1)]
@@ -99,3 +99,6 @@ func process_frame(delta: float) -> State:
 		set_part_timing()
 	return null
 	
+func exit()->void:
+	State_machine.current_colour=Current_Colour
+	super()
